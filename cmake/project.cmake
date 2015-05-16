@@ -94,6 +94,22 @@ function (build_project project_name mcu)
 	add_custom_command (TARGET ${target_project_name} POST_BUILD COMMAND arm-none-eabi-objcopy $<TARGET_FILE:${target_project_name}> -O binary $<TARGET_FILE_DIR:${target_project_name}>/$<TARGET_FILE_NAME:${target_project_name}>.bin)
 	#add_custom_command (TARGET ${target_project_name} POST_BUILD COMMAND arm-none-eabi-strip $<TARGET_FILE:${target_project_name}>)
 
+
+	if (NOT NO_MCU_CHECK_IMPL)	
+		add_executable(check_mcu_impl_${MCU} $<TARGET_OBJECTS:${MCU}_LIB>  ${EMBEDDED_ROOT_DIR}/backend/check_mcu_impl.cpp
+																			${EMBEDDED_ROOT_DIR}/backend/syscall.c)
+
+		target_compile_definitions(check_mcu_impl_${MCU} PRIVATE $<TARGET_PROPERTY:${MCU}_LIB,COMPILE_DEFINITIONS>)
+		target_compile_options(check_mcu_impl_${MCU} PRIVATE $<TARGET_PROPERTY:${MCU}_LIB,COMPILE_OPTIONS>) 
+		target_include_directories(check_mcu_impl_${MCU} PRIVATE ${EMBEDDED_ROOT_DIR}
+															   $<TARGET_PROPERTY:${MCU}_LIB,INCLUDE_DIRECTORIES>)
+		target_link_libraries(check_mcu_impl_${MCU}  ${${MCU}_LINK_FLAGS} -T ${LDSCRIPT})
+		set_target_properties(check_mcu_impl_${MCU} PROPERTIES LINK_FLAGS ${EMBEDDED_LINK_FLAGS})
+
+		add_dependencies(${target_project_name} check_mcu_impl_${MCU})
+	endif()
+
+
 	create_debug_files(${mcu})
 endfunction()
 
