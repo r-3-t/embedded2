@@ -249,19 +249,5 @@ void uart::send(unsigned char data)
 	_internal.USARTx->DR = (data & (uint16_t) 0x01FF);
 }
 
-void uart::send(const char* data)
-{
-	while (*data != 0)
-	{
-		send(*data);
-		++data;
-	}
-}
-
-void uart::send(const unsigned char* data, unsigned int length)
-{
-	for (unsigned int i = 0; i < length; i++)
-		send(data[i]);
-}
 
 }

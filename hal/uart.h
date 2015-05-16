@@ -59,8 +59,19 @@ public:
 	void init(unsigned int Id, config config, uart_callback callback);
 
 	void send(unsigned char data);
-	void send(const char* data);
-	void send(const unsigned char* data, unsigned int length);
+	void send(const char* data)
+	{
+		while (*data != 0)
+		{
+			send(*data);
+			++data;
+		}
+	}
+	void send(const unsigned char* data, unsigned int length)
+	{
+		for (unsigned int i = 0; i < length; i++)
+			send(data[i]);
+	}
 
 private:
 	uart_callback		_callback;
