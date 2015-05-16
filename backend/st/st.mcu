@@ -1,0 +1,2 @@
+Log(9, "adding st mcus")
+include (${CMAKE_CURRENT_LIST_DIR}/stm32/stm32.mcu)

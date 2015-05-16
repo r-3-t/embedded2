@@ -1,0 +1,141 @@
+Log(9, YELLOW "adding stm32f407 mcu")
+
+register_mcu("stm32f407")
+
+#compile flags for targets
+set(STM32F407_COMPILE_FLAGS -mthumb -mcpu=cortex-m4)
+
+#linker script
+set (STM32F407_FLASH_ORIGIN				0x08000000)
+set (STM32F407_RAM_ORIGIN				0x20000000)
+set (STM32F407_RAM_SIZE					128K)
+set (STM32F407_FLASH_SIZE				1024K)
+set (STM32F407_MIN_STACK_SIZE			0x800)
+set (STM32F407_MIN_HEAP_SIZE			0x800)
+
+#template
+set (STM32F407_NUM_LED					4)
+set (STM32F407_LED0_PORT				4)
+set (STM32F407_LED0_PIN					15)
+set (STM32F407_LED1_PORT				4)
+set (STM32F407_LED1_PIN					14)
+set (STM32F407_LED2_PORT				4)
+set (STM32F407_LED2_PIN					13)
+set (STM32F407_LED3_PORT				4)
+set (STM32F407_LED3_PIN					12)
+set (STM32F407_BUTTON0_PORT				1)
+set (STM32F407_BUTTON0_PIN				0)
+set (STM32F407_DEFAULT_UART				2)
+set (STM32F407_DEFAULT_TIMER			2)
+
+set (STM32F407_OPENOCDCFG_CONTENT
+"
+source [find board/stm32f4discovery.cfg]
+")
+
+
+add_definitions(-D'assert_param\(expr\)=\(\(void\)0\)')
+set (STM32F407_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
+set(STM32F4_STD_PERIPH_PATH ${STM32F407_ROOT_DIR}/system_files/STM32F4xx_DSP_StdPeriph_Lib_V1.3.0/Libraries/)
+set(STM_STD_LIB_FILES 	${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/misc.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_adc.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_can.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_crc.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_aes.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_des.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_cryp_tdes.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dac.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dbgmcu.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dcmi.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dma.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_dma2d.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_flash.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_md5.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_hash_sha1.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_i2c.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_iwdg.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_ltdc.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_pwr.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rng.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rtc.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_sai.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_sdio.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_spi.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_syscfg.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_usart.c
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_wwdg.c
+
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/misc.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_adc.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_can.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_crc.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_cryp.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_dac.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_dbgmcu.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_dcmi.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_dma.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_dma2d.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_exti.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_flash.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_fmc.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_fsmc.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_gpio.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_hash.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_i2c.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_iwdg.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_ltdc.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_pwr.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_rcc.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_rng.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_rtc.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_sai.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_sdio.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_spi.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_syscfg.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_tim.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_usart.h
+						${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc/stm32f4xx_wwdg.h
+
+						${STM32F4_STD_PERIPH_PATH}/CMSIS/Include/arm_common_tables.h
+						${STM32F4_STD_PERIPH_PATH}/CMSIS/Include/arm_const_structs.h
+						${STM32F4_STD_PERIPH_PATH}/CMSIS/Include/arm_math.h
+						${STM32F4_STD_PERIPH_PATH}/CMSIS/Include/core_cm4.h
+						${STM32F4_STD_PERIPH_PATH}/CMSIS/Include/core_cm4_simd.h
+						${STM32F4_STD_PERIPH_PATH}/CMSIS/Include/core_cmFunc.h
+						${STM32F4_STD_PERIPH_PATH}/CMSIS/Include/core_cmInstr.h
+						${STM32F4_STD_PERIPH_PATH}/CMSIS/Include/core_sc000.h
+						${STM32F4_STD_PERIPH_PATH}/CMSIS/Include/core_sc300.h
+
+						${STM32F4_STD_PERIPH_PATH}/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
+						${STM32F4_STD_PERIPH_PATH}/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h
+						${STM32F4_STD_PERIPH_PATH}/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c
+
+						)
+
+################################################################################
+################################ STM32F407 #####################################
+################################################################################
+add_library(STM32F407_LIB 	OBJECT 	${STM_STD_LIB_FILES}
+									${STM32F4_STD_PERIPH_PATH}/CMSIS/Device/ST/STM32F4xx/Source/Templates/TrueSTUDIO/startup_stm32f40xx.s
+									${STM32F407_ROOT_DIR}/impl/gpio.cpp
+									${STM32F407_ROOT_DIR}/impl/uart.cpp
+						)                     
+
+target_compile_definitions(STM32F407_LIB PUBLIC -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER -DHSE_VALUE=8000000 -DSTM32F4XX)
+target_compile_options(STM32F407_LIB PUBLIC ${STM32F407_COMPILE_FLAGS}) 
+target_include_directories(STM32F407_LIB PRIVATE 	${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc
+													${STM32F4_STD_PERIPH_PATH}/CMSIS/Device/ST/STM32F4xx/Include/
+													${STM32F4_STD_PERIPH_PATH}/CMSIS/Include/
+													${STM32F407_ROOT_DIR}/../../../../
+										  PUBLIC
+										  			${STM32F407_ROOT_DIR}
+												)
+
+
+
