@@ -19,6 +19,8 @@ void check_gpio()
 	gpio1.off();
 	gpio1.high();
 	gpio1.low();
+
+	gpio1.set_gpio_mode(gpio::Output);
 }
 
 void check_time()

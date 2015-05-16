@@ -92,4 +92,21 @@ void gpio::low()
 	GPIO_ResetBits(_internal.GPIOx, _internal.pin);
 }
 
+void gpio::set_gpio_mode(GpioMode mode)
+{
+		uint8_t i;
+	/* Go through all pins */
+	for (i = 0x00; i < 0x10; i++) {
+		/* Pin is set */
+		if (_internal.pin & (1 << i)) {
+			if (mode == Input)
+				/* Set 00 bits combination for input */
+				_internal.GPIOx->MODER &= ~(0x03 << (2 * i));
+			else
+				_internal.GPIOx->MODER = (_internal.GPIOx->MODER & ~(0x03 << (2 * i))) | (0x01 << (2 * i));
+		}
+	}
+
+}
+
 }

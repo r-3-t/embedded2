@@ -38,7 +38,7 @@ public:
 	void off();
 	void low();
 
-
+	void set_gpio_mode(GpioMode mode);
 
 private:
 	gpio_mcu_internal _internal;
