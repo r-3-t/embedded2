@@ -180,15 +180,10 @@ void uart::init(unsigned int Id, config configuration, uart_callback callback)
 
 
 				break;				break;
-		case 3: _internal.USARTx = USART3;
-				break;
-		case 4: _internal.USARTx = UART4;
-				break;
-		case 5: _internal.USARTx = UART5;
-				break;
-		case 6: _internal.USARTx = USART6;
-				break;
-		default : _internal.USARTx = nullptr;
+
+		default : 
+					while (true) {}
+					_internal.USARTx = nullptr;
 	}
 
 	//GPIO
