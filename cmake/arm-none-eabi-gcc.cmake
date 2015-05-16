@@ -46,7 +46,7 @@ endif()
  	#set (LINK_FLAGS_LTO "-flto -O0")
 # endif()
 
-set (COMMON_FLAGS "-Werror -Wno-error=cpp -Wextra -Warray-bounds -ffunction-sections -fdata-sections -fno-toplevel-reorder ${COMPIL_FLAGS_LTO}")
+set (COMMON_FLAGS "-Werror -Wno-error=cpp -Wextra -Warray-bounds -ffunction-sections -fdata-sections -fno-toplevel-reorder")
 
 set (CMAKE_C_FLAGS ${COMMON_FLAGS} CACHE STRING "CMAKE_C_FLAGS" FORCE)
 set (CMAKE_CXX_FLAGS "-std=c++11 -fno-builtin -fno-rtti -fno-exceptions ${COMMON_FLAGS}"  CACHE STRING "CMAKE_CXX_FLAGS" FORCE)
@@ -57,6 +57,13 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g"
 					 CACHE STRING "CMAKE_CXX_FLAGS_DEBUG" FORCE)
 set(CMAKE_ASM_FLAGS_DEBUG "-g"
 					 CACHE STRING "CMAKE_ASM_FLAGS_DEBUG" FORCE)
+
+set(CMAKE_C_FLAGS_RELEASE "-flto -O3"
+					 CACHE STRING "CMAKE_C_FLAGS_RELEASE" FORCE)
+set(CMAKE_CXX_FLAGS_RELEASE "-flto -O3"
+					 CACHE STRING "CMAKE_CXX_FLAGS_RELEASE" FORCE)
+set(CMAKE_ASM_FLAGS_RELEASE "-flto -O3"
+					 CACHE STRING "CMAKE_ASM_FLAGS_RELEASE" FORCE)
 
 set (CMAKE_C_LINK_FLAGS "" CACHE STRING "CMAKE_C_LINK_FLAGS" FORCE)
 set (CMAKE_CXX_LINK_FLAGS "" CACHE STRING "CMAKE_CXX_LINK_FLAGS" FORCE)
