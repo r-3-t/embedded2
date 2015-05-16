@@ -1,3 +1,5 @@
+#pragma once
+
 #include <mcu_internal.h>
 
 namespace uart
