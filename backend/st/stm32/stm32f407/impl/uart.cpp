@@ -138,7 +138,9 @@ void uart::init(unsigned int Id, config configuration, uart_callback callback)
 	uint8_t			GPIO_AF;
 
 	uint32_t		RCC_AHBPeriph_GPIOX;
-	uint32_t		RCC_APB2Periph_USARTx;
+	uint32_t		RCC_APBPeriph_USARTx;
+
+	void (*pRCC_APBxPeriphClockCmd)(uint32_t RCC_APBxPeriph, FunctionalState NewState);
 
 	_internal.Id = Id;
 	switch (Id)
@@ -154,7 +156,8 @@ void uart::init(unsigned int Id, config configuration, uart_callback callback)
 				GPIO_PinSource_Rx					= GPIO_PinSource7;
 				GPIO_AF								= GPIO_AF_USART1;
 				RCC_AHBPeriph_GPIOX					= RCC_AHB1Periph_GPIOB;
-				RCC_APB2Periph_USARTx				= RCC_APB2Periph_USART1;
+				pRCC_APBxPeriphClockCmd				= RCC_APB2PeriphClockCmd;
+				RCC_APBPeriph_USARTx				= RCC_APB2Periph_USART1;
 				NVIC_InitStructure.NVIC_IRQChannel	= USART1_IRQn;
 				TabCallback[0] = callback;
 
@@ -170,7 +173,8 @@ void uart::init(unsigned int Id, config configuration, uart_callback callback)
 				GPIO_PinSource_Rx					= GPIO_PinSource3;
 				GPIO_AF								= GPIO_AF_USART2;
 				RCC_AHBPeriph_GPIOX					= RCC_AHB1Periph_GPIOA;
-				RCC_APB2Periph_USARTx				= RCC_APB1Periph_USART2;
+				pRCC_APBxPeriphClockCmd				= RCC_APB1PeriphClockCmd;
+				RCC_APBPeriph_USARTx				= RCC_APB1Periph_USART2;
 				NVIC_InitStructure.NVIC_IRQChannel	= USART2_IRQn;
 				TabCallback[1] = callback;
 
@@ -190,7 +194,7 @@ void uart::init(unsigned int Id, config configuration, uart_callback callback)
 	//GPIO
 	RCC_AHB1PeriphClockCmd(RCC_AHBPeriph_GPIOX, ENABLE);
 	//USART
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USARTx, ENABLE);
+	pRCC_APBxPeriphClockCmd(RCC_APBPeriph_USARTx, ENABLE);
 
 
 	GPIO_InitTypeDef GPIO_InitStructure;
