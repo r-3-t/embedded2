@@ -3,10 +3,17 @@
 namespace gpio
 {
 
+enum pullup_pulldown
+{
+  PullUp	= 0x00,
+  PullDown	= 0x01,
+  NoPull	= 0x02
+};
+
 class gpio
 {
 public:
-	gpio(port Id);
+	gpio(port Id, pullup_pulldown config);
 
 	~gpio();
 

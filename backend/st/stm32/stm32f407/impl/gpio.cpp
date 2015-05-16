@@ -10,7 +10,7 @@
 namespace gpio
 {
 
-gpio::gpio(port Id)
+gpio::gpio(port Id, pullup_pulldown config)
 {
 	used_pinout::register_port(Id);
 
@@ -43,8 +43,14 @@ gpio::gpio(port Id)
 	GPIO_InitDef.GPIO_Mode = GPIO_Mode_OUT;
 	//Output type push-pull
 	GPIO_InitDef.GPIO_OType = GPIO_OType_PP;
-	//Without pull resistors
-	GPIO_InitDef.GPIO_PuPd = GPIO_PuPd_NOPULL;
+
+	switch (config)
+	{
+		case PullUp		:	GPIO_InitDef.GPIO_PuPd = GPIO_PuPd_UP; break;
+		case PullDown	:	GPIO_InitDef.GPIO_PuPd = GPIO_PuPd_DOWN; break;
+		case NoPull		:	GPIO_InitDef.GPIO_PuPd = GPIO_PuPd_NOPULL; break;
+	}
+
 	//50MHz pin speed
 	GPIO_InitDef.GPIO_Speed = GPIO_Speed_50MHz;
 	//Initialize pins
