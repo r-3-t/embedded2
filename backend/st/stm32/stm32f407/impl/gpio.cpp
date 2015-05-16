@@ -10,7 +10,7 @@
 namespace gpio
 {
 
-gpio::gpio(port Id, pullup_pulldown config)
+gpio::gpio(port Id, InputMode input, OutputMode output, GpioMode mode)
 {
 	used_pinout::register_port(Id);
 
@@ -39,12 +39,22 @@ gpio::gpio(port Id, pullup_pulldown config)
 
 	GPIO_InitTypeDef GPIO_InitDef;
 	GPIO_InitDef.GPIO_Pin = _internal.pin;
-	//Mode output
-	GPIO_InitDef.GPIO_Mode = GPIO_Mode_OUT;
-	//Output type push-pull
-	GPIO_InitDef.GPIO_OType = GPIO_OType_PP;
+	
+	switch (mode)
+	{
+		case Input	:	GPIO_InitDef.GPIO_Mode = GPIO_Mode_IN; break;
+		case Output	:	GPIO_InitDef.GPIO_Mode = GPIO_Mode_OUT; break;
+		case Analog	:	GPIO_InitDef.GPIO_Mode = GPIO_Mode_AN; break;
+	}
+	
 
-	switch (config)
+	switch (output)
+	{
+		case PushPull	: GPIO_InitDef.GPIO_OType = GPIO_OType_PP; break;
+		case OpenDrain	: GPIO_InitDef.GPIO_OType = GPIO_OType_OD; break;		
+	}
+
+	switch (input)
 	{
 		case PullUp		:	GPIO_InitDef.GPIO_PuPd = GPIO_PuPd_UP; break;
 		case PullDown	:	GPIO_InitDef.GPIO_PuPd = GPIO_PuPd_DOWN; break;

@@ -13,7 +13,7 @@ void check_uart()
 
 void check_gpio()
 {
-	gpio::gpio gpio1(PA0, gpio::NoPull);
+	gpio::gpio gpio1(PA0, gpio::NoPull, gpio::PushPull, gpio::Output);
 
 	gpio1.on();
 	gpio1.off();
