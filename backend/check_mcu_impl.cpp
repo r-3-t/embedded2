@@ -1,5 +1,6 @@
 #include <hal/uart.h>
 #include <hal/gpio.h>
+#include <hal/time.h>
 
 void check_uart()
 {
@@ -18,6 +19,18 @@ void check_gpio()
 	gpio1.off();
 	gpio1.high();
 	gpio1.low();
+}
+
+void check_time()
+{
+	unsigned int res =  time::getTickCount();
+	res += time::getTickPerMs();
+	res += time::getTickPerUs();
+
+	res += time::elapsedMicros(0);
+
+	time::msleep(1000);
+	time::usleep(1000);
 }
 
 int main (int argc, char** argv)
