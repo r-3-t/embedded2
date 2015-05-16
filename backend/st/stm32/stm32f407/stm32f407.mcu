@@ -132,7 +132,8 @@ target_compile_options(STM32F407_LIB PUBLIC ${STM32F407_COMPILE_FLAGS})
 target_include_directories(STM32F407_LIB PRIVATE 	${STM32F4_STD_PERIPH_PATH}/STM32F4xx_StdPeriph_Driver/inc
 													${STM32F4_STD_PERIPH_PATH}/CMSIS/Device/ST/STM32F4xx/Include/
 													${STM32F4_STD_PERIPH_PATH}/CMSIS/Include/
-													${STM32F407_ROOT_DIR}/../../../../
+													${EMBEDDED_ROOT_DIR}
+													${EMBEDDED_ROOT_DIR}/backend/
 										  PUBLIC
 										  			${STM32F407_ROOT_DIR}
 												)

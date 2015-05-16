@@ -7,6 +7,7 @@
 #include "misc.h"
 
 #include "mcu_internal.h"
+#include "pinout.h"
 
 namespace uart
 {
@@ -139,9 +140,13 @@ void uart::init(unsigned int Id, config configuration, uart_callback callback)
 	uint32_t		RCC_AHBPeriph_GPIOX;
 	uint32_t		RCC_APB2Periph_USARTx;
 
+	_internal.Id = Id;
 	switch (Id)
 	{
-		case 1: _internal.USARTx = USART1;
+		case 1: 
+				used_pinout::register_port(PB6);
+				used_pinout::register_port(PB7);
+				_internal.USARTx = USART1;
 				GPIOx								= GPIOB;
 				GPIO_Pin_Tx							= GPIO_Pin_6;
 				GPIO_Pin_Rx							= GPIO_Pin_7;
@@ -154,7 +159,10 @@ void uart::init(unsigned int Id, config configuration, uart_callback callback)
 				TabCallback[0] = callback;
 
 				break;
-		case 2: _internal.USARTx = USART2;
+		case 2: 
+				used_pinout::register_port(PA2);
+				used_pinout::register_port(PA3);
+				_internal.USARTx = USART2;
 				GPIOx								= GPIOA;
 				GPIO_Pin_Tx							= GPIO_Pin_2;
 				GPIO_Pin_Rx							= GPIO_Pin_3;
@@ -223,7 +231,15 @@ void uart::init(unsigned int Id, config configuration, uart_callback callback)
 
 uart::~uart()
 {
-
+	switch (_internal.Id)
+	{
+		case 1: 
+				used_pinout::unregister_port(PB6);
+				used_pinout::unregister_port(PB7);
+		case 2: 
+				used_pinout::unregister_port(PA2);
+				used_pinout::unregister_port(PA3);
+	}
 }
 
 void uart::send(unsigned char data)

@@ -5,12 +5,17 @@
 #include "stm32f4xx_gpio.h"
 
 #include "mcu_internal.h"
+#include "pinout.h"
 
 namespace gpio
 {
 
 gpio::gpio(port Id)
 {
+	used_pinout::register_port(Id);
+
+	_internal.p = Id;
+
 	unsigned int Gpio_RCC_AHB1Periph = 0;
 	switch (stm32f407::ID_TO_PORT(Id))
 	{
@@ -27,13 +32,13 @@ gpio::gpio(port Id)
 		default : while (1);
 	}
 
-	_internal.pins  = stm32f407::ID_TO_PINS(Id);
+	_internal.pin  = stm32f407::ID_TO_PIN(Id);
 
 	//Enable clock for selected GPIO
 	RCC_AHB1PeriphClockCmd(Gpio_RCC_AHB1Periph, ENABLE);
 
 	GPIO_InitTypeDef GPIO_InitDef;
-	GPIO_InitDef.GPIO_Pin = _internal.pins;
+	GPIO_InitDef.GPIO_Pin = _internal.pin;
 	//Mode output
 	GPIO_InitDef.GPIO_Mode = GPIO_Mode_OUT;
 	//Output type push-pull
@@ -48,27 +53,27 @@ gpio::gpio(port Id)
 
 gpio::~gpio()
 {
-
+	used_pinout::unregister_port(_internal.p);
 }
 
 void gpio::on()
 {
-	GPIO_SetBits(_internal.GPIOx, _internal.pins);
+	GPIO_SetBits(_internal.GPIOx, _internal.pin);
 }
 
 void gpio::high()
 {
-	GPIO_SetBits(_internal.GPIOx, _internal.pins);
+	GPIO_SetBits(_internal.GPIOx, _internal.pin);
 }
 
 void gpio::off()
 {
-	GPIO_ResetBits(_internal.GPIOx, _internal.pins);
+	GPIO_ResetBits(_internal.GPIOx, _internal.pin);
 }
 
 void gpio::low()
 {
-	GPIO_ResetBits(_internal.GPIOx, _internal.pins);
+	GPIO_ResetBits(_internal.GPIOx, _internal.pin);
 }
 
 }

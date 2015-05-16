@@ -2,22 +2,11 @@
 
 #include <stm32f4xx.h>
 
-struct gpio_mcu_internal
-{
-	GPIO_TypeDef* GPIOx;
-	unsigned int pins;
-};
-
-struct uart_mcu_internal
-{
-	USART_TypeDef* USARTx;
-};	
-
 namespace stm32f407
 {
 constexpr unsigned int PORT_PIN_TO_ID(unsigned short port, unsigned short pin) { return ((port << 16) | pin ); }
 constexpr unsigned short ID_TO_PORT(unsigned int id) { return (id >> 16); }
-constexpr unsigned short ID_TO_PINS(unsigned int id) { return (id & 0xFFFF); }
+constexpr unsigned short ID_TO_PIN(unsigned int id) { return (id & 0xFFFF); }
 
 constexpr unsigned int __GPIOA	= 0x0001;
 constexpr unsigned int __GPIOB	= 0x0002;
@@ -118,5 +107,18 @@ enum port
 	PE14 	= stm32f407::PORT_PIN_TO_ID(stm32f407::__GPIOE, 0x4000),
 	PE15 	= stm32f407::PORT_PIN_TO_ID(stm32f407::__GPIOE, 0x8000),
 };
+
+struct gpio_mcu_internal
+{
+	GPIO_TypeDef* 	GPIOx;
+	unsigned int 	pin;
+	port 			p;
+};
+
+struct uart_mcu_internal
+{
+	USART_TypeDef* 	USARTx;
+	unsigned int	Id;
+};	
 
 
