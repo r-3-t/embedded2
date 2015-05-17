@@ -109,4 +109,9 @@ void gpio::set_gpio_mode(GpioMode mode)
 
 }
 
+uint8_t gpio::get_input_value()
+{
+	return ((_internal.GPIOx)->IDR & (_internal.pin)) == 0 ? 0 : 1;
+}
+
 }

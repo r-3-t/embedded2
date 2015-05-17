@@ -1,6 +1,7 @@
 #pragma once
 
 #include <mcu_internal.h>
+#include <cstdint>
 
 namespace gpio
 {
@@ -39,6 +40,8 @@ public:
 	void low();
 
 	void set_gpio_mode(GpioMode mode);
+
+	uint8_t get_input_value();
 
 private:
 	gpio_mcu_internal _internal;
