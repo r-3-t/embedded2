@@ -1,4 +1,9 @@
 # Embedded 2
+## TOC
+* [Supported mcu](#supported-mcu)
+* [How to compile an example](#how-to-compile-an-example)
+* [Architecture](#architecture)
+* [How to add a new mcu](#how-to-add-a-new-mcu)
 
 ## Supported mcu
 * stm32f407 (stm32f4 discovery)
@@ -30,7 +35,7 @@ Info : stm32f4x.cpu: hardware has 6 breakpoints, 4 watchpoints
 * lauchn `arm-none-eabi-gdb test_uart_stm32f407`:
 	* type `monitor reset init`
 	* type `load`
-	* type `run`
+	* type `c` (continue)
 
 ## Architecture 
 
@@ -41,8 +46,16 @@ embedded2
 	|
 	|____ cmake		: cmake scripts
 	|
+	|____ driver	: driver only needs hal to be implemented. They work on all mcus  
+	|
 	|____ example	: code examples
 	|
 	|____ hal		: hardware abstraction layer.
 					  example must only use these headers
 ```
+## How to add a new mcu
+Look at the template folder in backend. You must fill some files :
+
+* a cmake file which describes the mcu
+* cpp files in the impl folder (uart, gpio, ...)
+* mcu_internal.h which is include in all hal files. It allows to store private variables member.
