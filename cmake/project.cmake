@@ -80,7 +80,12 @@ function (build_project project_name mcu)
 	string (TOUPPER ${mcu} MCU)
 
 	get_property(project_sources GLOBAL PROPERTY __PROJECT_${project_name})
-	add_executable(${target_project_name} $<TARGET_OBJECTS:${MCU}_LIB> ${project_sources} ${EMBEDDED_ROOT_DIR}/backend/syscall.c)
+	add_executable(${target_project_name} $<TARGET_OBJECTS:${MCU}_LIB>	${project_sources}
+																		${EMBEDDED_ROOT_DIR}/backend/syscall.c
+																		${EMBEDDED_ROOT_DIR}/driver/one_wire/one_wire.h
+																		${EMBEDDED_ROOT_DIR}/driver/one_wire/one_wire.cpp
+																		${EMBEDDED_ROOT_DIR}/driver/ds18b20/ds18b20.h
+																		${EMBEDDED_ROOT_DIR}/driver/ds18b20/ds18b20.cpp)
 	target_compile_definitions(${target_project_name} PRIVATE $<TARGET_PROPERTY:${MCU}_LIB,COMPILE_DEFINITIONS>)
 	target_compile_options(${target_project_name}  PRIVATE $<TARGET_PROPERTY:${MCU}_LIB,COMPILE_OPTIONS>) 
 
