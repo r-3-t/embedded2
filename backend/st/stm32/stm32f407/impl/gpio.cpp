@@ -10,7 +10,7 @@
 namespace gpio
 {
 
-gpio::gpio(port Id, InputMode input, OutputMode output, GpioMode mode)
+gpio::gpio(port Id)
 {
 	used_pinout::register_port(Id);
 
@@ -40,31 +40,6 @@ gpio::gpio(port Id, InputMode input, OutputMode output, GpioMode mode)
 	GPIO_InitTypeDef GPIO_InitDef;
 	GPIO_InitDef.GPIO_Pin = _internal.pin;
 	
-	switch (mode)
-	{
-		case Input	:	GPIO_InitDef.GPIO_Mode = GPIO_Mode_IN; break;
-		case Output	:	GPIO_InitDef.GPIO_Mode = GPIO_Mode_OUT; break;
-		case Analog	:	GPIO_InitDef.GPIO_Mode = GPIO_Mode_AN; break;
-	}
-	
-
-	switch (output)
-	{
-		case PushPull	: GPIO_InitDef.GPIO_OType = GPIO_OType_PP; break;
-		case OpenDrain	: GPIO_InitDef.GPIO_OType = GPIO_OType_OD; break;		
-	}
-
-	switch (input)
-	{
-		case PullUp		:	GPIO_InitDef.GPIO_PuPd = GPIO_PuPd_UP; break;
-		case PullDown	:	GPIO_InitDef.GPIO_PuPd = GPIO_PuPd_DOWN; break;
-		case NoPull		:	GPIO_InitDef.GPIO_PuPd = GPIO_PuPd_NOPULL; break;
-	}
-
-	//50MHz pin speed
-	GPIO_InitDef.GPIO_Speed = GPIO_Speed_50MHz;
-	//Initialize pins
-	GPIO_Init(_internal.GPIOx, &GPIO_InitDef);
 }
 
 gpio::~gpio()
@@ -92,21 +67,57 @@ void gpio::low()
 	GPIO_ResetBits(_internal.GPIOx, _internal.pin);
 }
 
-void gpio::set_gpio_mode(GpioMode mode)
+void gpio::set_as_digital_input(InputMode mode)
 {
-		uint8_t i;
-	/* Go through all pins */
-	for (i = 0x00; i < 0x10; i++) {
-		/* Pin is set */
-		if (_internal.pin & (1 << i)) {
-			if (mode == Input)
-				/* Set 00 bits combination for input */
-				_internal.GPIOx->MODER &= ~(0x03 << (2 * i));
-			else
-				_internal.GPIOx->MODER = (_internal.GPIOx->MODER & ~(0x03 << (2 * i))) | (0x01 << (2 * i));
-		}
+	GPIO_InitTypeDef GPIO_InitDef;
+	GPIO_StructInit(&GPIO_InitDef);
+
+	GPIO_InitDef.GPIO_Pin = _internal.pin;
+	GPIO_InitDef.GPIO_Mode = GPIO_Mode_IN;
+	switch (mode)
+	{
+		case PullUp		:	GPIO_InitDef.GPIO_PuPd = GPIO_PuPd_UP; break;
+		case PullDown	:	GPIO_InitDef.GPIO_PuPd = GPIO_PuPd_DOWN; break;
+		case NoPull		:	GPIO_InitDef.GPIO_PuPd = GPIO_PuPd_NOPULL; break;
+	}
+	//50MHz pin speed
+	GPIO_InitDef.GPIO_Speed = GPIO_Speed_50MHz;
+	//Initialize pins
+	GPIO_Init(_internal.GPIOx, &GPIO_InitDef);
+}
+
+void gpio::set_as_analog_input()
+{
+	GPIO_InitTypeDef GPIO_InitDef;
+	GPIO_StructInit(&GPIO_InitDef);
+
+	GPIO_InitDef.GPIO_Pin = _internal.pin;
+	GPIO_InitDef.GPIO_Mode = GPIO_Mode_AN;
+
+	//50MHz pin speed
+	GPIO_InitDef.GPIO_Speed = GPIO_Speed_50MHz;
+	//Initialize pins
+	GPIO_Init(_internal.GPIOx, &GPIO_InitDef);
+}
+
+void gpio::set_as_digital_output(OutputMode mode)
+{
+	GPIO_InitTypeDef GPIO_InitDef;
+	GPIO_StructInit(&GPIO_InitDef);
+
+	GPIO_InitDef.GPIO_Pin = _internal.pin;
+	GPIO_InitDef.GPIO_Mode = GPIO_Mode_OUT;
+
+	switch (mode)
+	{
+		case PushPull	: GPIO_InitDef.GPIO_OType = GPIO_OType_PP; break;
+		case OpenDrain	: GPIO_InitDef.GPIO_OType = GPIO_OType_OD; break;		
 	}
 
+	//50MHz pin speed
+	GPIO_InitDef.GPIO_Speed = GPIO_Speed_50MHz;
+	//Initialize pins
+	GPIO_Init(_internal.GPIOx, &GPIO_InitDef);
 }
 
 uint8_t gpio::get_input_value()

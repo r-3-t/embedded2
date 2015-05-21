@@ -13,14 +13,19 @@ void check_uart()
 
 void check_gpio()
 {
-	gpio::gpio gpio1(PA0, gpio::NoPull, gpio::PushPull, gpio::Output);
+	gpio::gpio gpio1(PA0);
+
+
+	gpio1.set_as_digital_output(gpio::PushPull);
+	gpio1.set_as_digital_input(gpio::NoPull);
+	gpio1.set_as_analog_input();
 
 	gpio1.on();
 	gpio1.off();
 	gpio1.high();
 	gpio1.low();
 
-	gpio1.set_gpio_mode(gpio::Output);
+	gpio1.get_input_value();
 }
 
 void check_time()

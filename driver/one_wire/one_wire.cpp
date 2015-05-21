@@ -6,7 +6,7 @@ namespace one_wire
 
 
 
-one_wire::one_wire(port Id) : gpio::gpio(Id, ::gpio::PullUp, ::gpio::PushPull, ::gpio::Input)
+one_wire::one_wire(port Id) : gpio::gpio(Id)
 {
 
 }
@@ -21,11 +21,11 @@ bool one_wire::reset()
 {
 	/* Line low, and wait 480us */
 	low();
-	set_gpio_mode(::gpio::Output);
+	set_as_digital_output(::gpio::PushPull);
 	time::usleep(480);
 	
 	/* Release line and wait for 70us */
-	set_gpio_mode(::gpio::Input);
+	set_as_digital_input(::gpio::PullUp);
 	time::usleep(70);
 	
 	/* Check bit value */
@@ -63,12 +63,12 @@ uint8_t one_wire::read_byte()
 void one_wire::write_bit(uint8_t bit) {
 	if (bit) {
 		/* Set line low */
-		set_gpio_mode(::gpio::Output);
+		set_as_digital_output(::gpio::PushPull);
 		low();
 		time::usleep(10);
 		
 		/* Bit high */
-		set_gpio_mode(::gpio::Input);
+		set_as_digital_input(::gpio::PullUp);
 		
 		/* Wait for 55 us and release the line */
 		time::usleep(55);
@@ -76,13 +76,13 @@ void one_wire::write_bit(uint8_t bit) {
 	else
 	{
 		/* Set line low */
-		set_gpio_mode(::gpio::Output);
+		set_as_digital_output(::gpio::PushPull);
 		low();
 		time::usleep(65);
 		
 		/* Bit high */
-		set_gpio_mode(::gpio::Input);
-		
+		set_as_digital_input(::gpio::PullUp);
+
 		/* Wait for 5 us and release the line */
 		time::usleep(5);
 	}
@@ -94,12 +94,12 @@ uint8_t one_wire::read_bit()
 	uint8_t bit = 0;
 	
 	/* Line low */
-	set_gpio_mode(::gpio::Output);
+	set_as_digital_output(::gpio::PushPull);
 	low();
 	time::usleep(3);
 	
 	/* Release line */
-	set_gpio_mode(::gpio::Input);
+	set_as_digital_input(::gpio::PullUp);
 	time::usleep(10);
 	
 	/* Read line value */
@@ -156,9 +156,18 @@ uint8_t one_wire::get_next_periph(search_context* pSearchCtx, uint8_t ROM_NO[8])
 		do
 		{
 			// read a bit and its complement
-			id_bit = read_bit();
-			cmp_id_bit = read_bit();
+			id_bit			= read_bit();
+			cmp_id_bit		= read_bit();
 
+			/*
+			Bit Search Information
+			Bit (true) 	Bit (complement) 	Information Known
+			0 	0 	There are both 0s and 1s in the current bit position of the participating ROM numbers. This is a discrepancy.
+			0 	1 	There are only 0s in the bit of the participating ROM numbers.
+			1 	0 	There are only 1s in the bit of the participating ROM numbers.
+			1 	1 	No devices participating in search.
+			*/
+			
 			// check for no devices on 1-wire
 			if ((id_bit == 1) && (cmp_id_bit == 1))
 			{

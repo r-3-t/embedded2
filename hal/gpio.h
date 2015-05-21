@@ -8,9 +8,9 @@ namespace gpio
 
 enum InputMode
 {
-	PullUp	= 0x00,
+	PullUp		= 0x00,
 	PullDown	= 0x01,
-	NoPull	= 0x02
+	NoPull		= 0x02
 };
 
 enum OutputMode
@@ -21,15 +21,15 @@ enum OutputMode
 
 enum GpioMode
 {
-	Input	= 0x00,
-	Output	= 0x01,
-	Analog	= 0x03,
+	Input		= 0x00,
+	Output		= 0x01,
+	AnalogInput	= 0x03,
 };
 
 class gpio
 {
 public:
-	gpio(port Id, InputMode input, OutputMode output, GpioMode mode);
+	gpio(port Id);
 
 	~gpio();
 
@@ -39,7 +39,10 @@ public:
 	void off();
 	void low();
 
-	void set_gpio_mode(GpioMode mode);
+	void set_as_digital_input(InputMode mode);
+	void set_as_analog_input();
+
+	void set_as_digital_output(OutputMode mode);
 
 	uint8_t get_input_value();
 
