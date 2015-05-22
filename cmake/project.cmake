@@ -52,8 +52,8 @@ function (create_debug_files mcu)
 	monitor reset init
 	")
 
-	file (WRITE ${CMAKE_CURRENT_BINARY_DIR}/.gdbinit ${GDBINIT_CONTENT})
-	file (WRITE ${CMAKE_CURRENT_BINARY_DIR}/openocd.cfg ${${MCU}_OPENOCDCFG_CONTENT})
+	file (WRITE ${CMAKE_CURRENT_BINARY_DIR}/${MCU}_gdbinit ${GDBINIT_CONTENT})
+	file (WRITE ${CMAKE_CURRENT_BINARY_DIR}/${MCU}_openocd.cfg ${${MCU}_OPENOCDCFG_CONTENT})
 endfunction()
 
 #-------------------------------------------------------------------------------
