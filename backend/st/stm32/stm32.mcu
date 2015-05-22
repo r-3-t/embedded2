@@ -1,2 +1,3 @@
 Log(9, "adding stm32 mcus")
 include (${CMAKE_CURRENT_LIST_DIR}/stm32f407/stm32f407.mcu)
+include (${CMAKE_CURRENT_LIST_DIR}/stm32f103/stm32f103.mcu)
