@@ -67,7 +67,7 @@ set(CMAKE_ASM_FLAGS_RELEASE "-flto -O3"
 
 set (CMAKE_C_LINK_FLAGS "" CACHE STRING "CMAKE_C_LINK_FLAGS" FORCE)
 set (CMAKE_CXX_LINK_FLAGS "" CACHE STRING "CMAKE_CXX_LINK_FLAGS" FORCE)
-set(EMBEDDED_LINK_FLAGS "-Wl,--gc-sections -mthumb -mcpu=cortex-m4 --specs=nano.specs -u _printf_float" CACHE STRING "LINK_FLAGS" FORCE)
+set(EMBEDDED_LINK_FLAGS "-Wl,--gc-sections --specs=nano.specs -u _printf_float" CACHE STRING "LINK_FLAGS" FORCE)
 
 ENABLE_LANGUAGE(ASM)
 
