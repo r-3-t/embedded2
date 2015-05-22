@@ -1,6 +1,12 @@
 #include <hal/time.h>
 
-#include "stm32f4xx.h"
+#if defined STM32F407
+#	include "stm32f4xx.h"
+#elif defined STM32F103
+#	include "stm32f10x.h"
+#else
+#	error "Unknown mcu"
+#endif
 
 namespace
 {

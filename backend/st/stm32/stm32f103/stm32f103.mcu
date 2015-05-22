@@ -25,20 +25,8 @@ register_mcu("stm32f103")
 
 	set (STM32F103_OPENOCDCFG_CONTENT
 	"
-	interface ft2232
-	ft2232_device_desc \"USB<=>JTAG&RS232\"
-	ft2232_layout jtagkey
-	ft2232_vid_pid 0x1457 0x5118
-
-	source [find target/stm32f1x.cfg]
-
-	#jtag_rclk 1500
-
-	gdb_breakpoint_override hard
-
-	#reset_config trst_and_srst srst_pulls_trst srst_gates_jtag
-	reset_config trst_and_srst separate
-
+	source [find interface/stlink-v2.cfg]
+	source [find target/stm32f1x_stlink.cfg]
 	")
 
 add_definitions(-D'assert_param\(expr\)=\(\(void\)0\)')
@@ -112,7 +100,7 @@ add_library(STM32F103_LIB 	OBJECT 	${STM_STD_LIB_FILES}
 									${STM32F1_STD_PERIPH_PATH}/CMSIS/CM3/DeviceSupport/ST/STM32F10x/startup/TrueSTUDIO/startup_stm32f10x_md.s
 									${STM32F103_ROOT_DIR}/impl/gpio.cpp
 									${STM32F103_ROOT_DIR}/impl/uart.cpp
-									${STM32F103_ROOT_DIR}/impl/time.cpp
+									${STM32F103_ROOT_DIR}/../common/time.cpp
 						)                     
 
 target_compile_definitions(STM32F103_LIB PUBLIC -DSTM32F10X_MD -DSTM32F103)
@@ -124,4 +112,5 @@ target_include_directories(STM32F103_LIB PRIVATE 	${STM32F1_STD_PERIPH_DRIVER}/i
 										  PUBLIC
 													${STM32F1_STD_PERIPH_PATH}/CMSIS/CM3/DeviceSupport/ST/STM32F10x/
 										  			${STM32F103_ROOT_DIR}
+										  			${STM32F103_ROOT_DIR}/../../
 												)

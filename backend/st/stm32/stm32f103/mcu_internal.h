@@ -78,7 +78,8 @@ struct gpio_mcu_internal
 // this structure is a private member of uart class
 struct uart_mcu_internal
 {
-	char plop[1];
+	USART_TypeDef* 	USARTx;
+	unsigned int	Id;
 };	
 
 
