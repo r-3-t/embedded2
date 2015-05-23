@@ -50,6 +50,11 @@ function (create_debug_files mcu)
 	"
 	target remote localhost:3333
 	monitor reset init
+
+	define reload
+		monitor reset init
+		load
+	end
 	")
 
 	file (WRITE ${CMAKE_CURRENT_BINARY_DIR}/${MCU}_gdbinit ${GDBINIT_CONTENT})

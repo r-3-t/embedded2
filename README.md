@@ -18,7 +18,7 @@
 * two files will be created in the workspace folder:
 	* ${MCU}_openocd.cfg (e.g. STM32F407_openocd.cfg)
 	* ${MCU}_gdbinit (e.g. STM32F407_gdbinit)
-* launch openocd --filename=${MCU}_openocd.cfg, you should see a message like : 
+* launch openocd -f ${MCU}_openocd.cfg, you should see a message like : 
 
 ```
 Open On-Chip Debugger 0.7.0 (2015-01-02-12:46)
@@ -32,7 +32,7 @@ Info : Target voltage: 2.885076
 Info : stm32f4x.cpu: hardware has 6 breakpoints, 4 watchpoints
 ```
 
-* lauchn `arm-none-eabi-gdb test_uart_stm32f407 --ix=STM32F407_gdbinit`:
+* lauchn `arm-none-eabi-gdb test_uart_stm32f407 --ix STM32F407_gdbinit`:
 	* type `monitor reset init`
 	* type `load`
 	* type `c` (continue)
