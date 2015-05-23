@@ -4,6 +4,7 @@ register_mcu("stm32f407")
 
 #compile flags for targets
 set(STM32F407_COMPILE_FLAGS -mthumb -mcpu=cortex-m4)
+set(STM32F407_LINK_FLAGS -mthumb -mcpu=cortex-m4)
 
 #linker script
 set (STM32F407_FLASH_ORIGIN				0x08000000)
