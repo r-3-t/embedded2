@@ -32,22 +32,22 @@ gpio::~gpio()
 
 void gpio::on()
 {
-
+	GPIO_SetBits(_internal.GPIOx, _internal.pin);
 }
 
 void gpio::high()
 {
-
+	GPIO_SetBits(_internal.GPIOx, _internal.pin);
 }
 
 void gpio::off()
 {
-
+	GPIO_ResetBits(_internal.GPIOx, _internal.pin);
 }
 
 void gpio::low()
 {
-
+	GPIO_ResetBits(_internal.GPIOx, _internal.pin);
 }
 
 void gpio::set_as_digital_input(InputMode mode)
@@ -102,7 +102,7 @@ void gpio::set_as_digital_output(OutputMode mode)
 
 uint8_t gpio::gpio::get_input_value()
 {
-	return 0;
+	return ((_internal.GPIOx)->IDR & (_internal.pin)) == 0 ? 0 : 1;
 }
 
 }
