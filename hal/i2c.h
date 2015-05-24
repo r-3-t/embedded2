@@ -15,7 +15,7 @@ namespace i2c
 		typedef enum {Enable, Disable} AcknowledgementMode_t;
 
 
-		static Configuration default()
+		static Configuration _default()
 		{
 			return {StandardMode, _7_bits, Enable};
 		}
